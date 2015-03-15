@@ -1,38 +1,40 @@
 (function(app,undefined){
-'use strict';
+	'use strict';
 
-/**
- * @ngdoc function
- * @name todoApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the todoApp
- */
-app.controller('MainCtrl', 
-	['localStorageService',
-	function (localStorageService) {
+	/**
+	 * @ngdoc function
+	 * @name todoApp.controller:MainCtrl
+	 * @description
+	 * # MainCtrl
+	 * Controller of the todoApp
+	 */
+	app.controller('MainCtrl', 
+		[ 'localStorageService',
+      'todoModel',
+  		function (localStorageService, todoModel) {
 
-	  	var self=this;
-	  	var todosInStore = localStorageService.get('todos');
-	  	this.model = this.model || {};
-	    this.model = {
-				    	todo:'',
-				    	todos: todosInStore || []
-				    		};
+  		  	var vm = this;  		  	  		  	
+  		    vm.model = {
+  					    	todo:'',
+  					    	todos: (todoModel.loadTodo())
+  					    		};
 
-	    this.api = this.api || {};
-	    this.api = {
-	    	addTodo: function(){
-	    		self.model.todos.push(self.model.todo);
-	    		localStorageService.set('todos', self.model.todos);
-	    		self.model.todo='';
-	    	},
+          vm.api= {
+            addTodo:addTodo,
+            removeTodo:removeTodo
+          }; 
 
-	    	removeTodo: function(index){
-	    		self.model.todos.splice(index, 1);
-	    		localStorageService.set('todos', self.model.todos);
-	    	}
-	    };
-  }]);
+
+          function addTodo(){
+            vm.model.todos = todoModel.addTodo(vm.model.todo);
+          }
+
+          function removeTodo(index){
+            vm.model.todos = todoModel.removeTodo(index);
+          }
+          
+          
+
+  	  }]);
 
 }(angular.module('todoApp')));
