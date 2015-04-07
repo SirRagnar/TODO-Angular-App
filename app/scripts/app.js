@@ -1,5 +1,5 @@
-'use strict';
 (function (angular, undefined) {
+  'use strict';
   /**
    * @ngdoc overview
    * @name todoApp
